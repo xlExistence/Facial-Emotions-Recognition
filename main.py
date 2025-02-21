@@ -1,7 +1,7 @@
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.preprocessing.image import ImageDataGenerator # type: ignore
+from keras.models import Sequential # type: ignore
+from keras.layers import Dense, Dropout, Flatten # type: ignore
+from keras.layers import Conv2D, MaxPooling2D # type: ignore
 import os
 
 train_data_dir = 'data_fer2013/train'
@@ -36,7 +36,7 @@ class_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise
 img, label = train_generator.__next__()
 
 
-# Creación del modelo (CNN)
+# Creación e impresión del modelo (CNN)
 
 model = Sequential()
 
@@ -62,3 +62,27 @@ model.add(Dense(7, activation='softmax'))
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 print(model.summary())
+
+# Contar imagenes de entrenamiento y prueba
+
+train_path = train_data_dir
+test_path = validation_data_dir
+
+num_train_imgs = 0
+for root, dirs, files in os.walk(train_path):
+    num_train_imgs += len(files)
+num_test_imgs = 0
+for root, dirs, files in os.walk(test_path):
+    num_test_imgs += len(files)
+print(num_train_imgs)
+print(num_test_imgs)
+
+# Entrenamiento del modelo
+
+history = model.fit(train_generator,
+                    steps_per_epoch = num_train_imgs//32,
+                    epochs = 30,
+                    validation_data = validation_generator,
+                    validation_steps = num_test_imgs//32)
+
+model.save('CNN_30E.keras')
