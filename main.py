@@ -79,10 +79,13 @@ print(num_test_imgs)
 
 # Entrenamiento del modelo
 
+epocas = 100
+
 history = model.fit(train_generator,
                     steps_per_epoch = num_train_imgs//32,
-                    epochs = 30,
+                    epochs = epocas,
                     validation_data = validation_generator,
                     validation_steps = num_test_imgs//32)
 
-model.save('CNN_30E.keras')
+model.save('CNN_100E.keras')
+# model.save(f"CNN_{epocas}E.keras")
