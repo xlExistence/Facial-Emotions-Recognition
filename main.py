@@ -16,3 +16,21 @@ train_datagen = ImageDataGenerator(
 					horizontal_flip = True,
 					fill_mode = 'nearest')
 validation_datagen = ImageDataGenerator(rescale = 1./255)
+
+train_generator = train_datagen.flow_from_directory(
+					train_data_dir,
+					color_mode = 'grayscale',
+					target_size = (48, 48),
+					batch_size = 32,
+					class_mode = 'categorical',
+					shuffle = True)
+validation_generator = validation_datagen.flow_from_directory(
+							validation_data_dir,
+							color_mode = 'grayscale',
+							target_size = (48, 48),
+							batch_size = 32,
+							class_mode = 'categorical',
+							shuffle = True)
+
+class_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
+img, label = train_generator.__next__()
